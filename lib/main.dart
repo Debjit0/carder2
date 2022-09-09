@@ -1,7 +1,10 @@
 import 'package:carder2/addCard.dart';
+import 'package:carder2/deletecard.dart';
+import 'package:carder2/models/DatabaseHelper.dart';
+import 'package:carder2/models/cardwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_card/awesome_card.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'models/fab.dart';
 
 void main() {
@@ -16,9 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData.light(),
       //home: const MyHomePage(title: 'Flutter Demo Home Page'),
       home: AddCard(),
     );
@@ -36,66 +37,64 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool bs = false;
+  DatabaseHelper _dbhelper = DatabaseHelper();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                CreditCard(
-                    cardNumber: "5450 7879 4864 7854",
-                    cardExpiry: "10/25",
-                    cardHolderName: "Card Holder",
-                    cvv: "456",
-                    bankName: "Axis Bank",
-                    cardType: CardType.visa,
-                    showBackSide: bs,
-                    frontBackground: CardBackgrounds.black,
-                    backBackground: CardBackgrounds.white,
-                    showShadow: true,
-                    textExpDate: 'Exp. Date',
-                    textName: 'Name',
-                    textExpiry: 'MM/YY'),
-                Container(
-                  height: 200,
-                  width: 400,
-                  //decoration: BoxDecoration(color: Colors.red),
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        if (bs == true) {
-                          bs = false;
-                        } else {
-                          bs = true;
-                        }
-                      });
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //CardWidget(),
+              FutureBuilder(
+                future: _dbhelper.getCards(),
+                builder: (context, AsyncSnapshot snapshot) {
+                  return ListView.builder(
+                    physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      return CardWidget(
+                        cardHolder: snapshot.data[index].cardHolder,
+                        bankNm: snapshot.data[index].bankNm,
+                        cardNo: snapshot.data[index].cardNo,
+                        exp: snapshot.data[index].exp,
+                        type: snapshot.data[index].type,
+                        cvv: snapshot.data[index].cvv,
+                      );
                     },
-                  ),
-                )
-              ],
-            ),
-          ],
+                  );
+                },
+              )
+            ],
+          ),
         ),
       ),
       floatingActionButton: ExpandableFabClass(
         distanceBetween: 70.0,
         subChildren: [
           FloatingActionButton.extended(
+            backgroundColor: Colors.black,
             heroTag: "btn1",
             onPressed: () {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => AddCard()));
             },
-            label: Text("Add Card"),
+            label: Text(
+              "Add Card",
+              style: TextStyle(color: Colors.white),
+            ),
             icon: Icon(Icons.credit_card_outlined),
+            foregroundColor: Colors.white,
           ),
           FloatingActionButton.extended(
+            backgroundColor: Colors.red,
             heroTag: "btn2",
-            onPressed: () => print('ABC'),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DeleteCard()));
+            },
             label: Text("Delete Card"),
             icon: Icon(Icons.credit_card_off_outlined),
           ),

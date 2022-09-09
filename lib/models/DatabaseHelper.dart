@@ -1,6 +1,5 @@
 import 'package:carder2/models/CardInfo.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:carder2/models/cardwidget.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -18,23 +17,24 @@ class DatabaseHelper {
     );
   }
 
-  Future<void> insertCards(CardInfo cardinfo) async {
+  Future<void> insertCards(CardWidget cardWidget) async {
     Database _db = await database();
-    await _db.insert('cards', cardinfo.toMap(),
+    await _db.insert('cards', cardWidget.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<List<CardInfo>> getCards() async {
+  Future<List<CardWidget>> getCards() async {
     Database _db = await database();
     List<Map<String, dynamic>> cardMap = await _db.query('cards');
     return List.generate(cardMap.length, ((index) {
-      return CardInfo(
+      print(cardMap[index]['cardHolder']);
+      return CardWidget(
           id: cardMap[index]['id'],
           cardHolder: cardMap[index]['cardHolder'],
           cardNo: cardMap[index]['cardNo'],
           cvv: cardMap[index]['cvv'],
-          exp: cardMap[index]['cardHolder'],
-          type: cardMap[index]['cardHolder'],
+          exp: cardMap[index]['exp'],
+          type: cardMap[index]['type'],
           bankNm: cardMap[index]['bankNm']);
     }));
   }

@@ -78,6 +78,7 @@ class _ExpandableFabClassState extends State<ExpandableFabClass>
       height: 56.0,
       child: Center(
         child: Material(
+          color: Colors.black,
           shape: const CircleBorder(),
           clipBehavior: Clip.antiAlias,
           elevation: 4.0,
