@@ -1,10 +1,6 @@
-import 'dart:math';
-
 import 'package:awesome_card/credit_card.dart';
 import 'package:awesome_card/extra/card_type.dart';
 import 'package:awesome_card/style/card_background.dart';
-import 'package:flutter/material.dart';
-
 import 'package:flutter/material.dart';
 
 class CardWidget extends StatefulWidget {
@@ -43,8 +39,22 @@ class CardWidget extends StatefulWidget {
 
 class _CardWidgetState extends State<CardWidget> {
   bool bs = false;
+  void rotateCard() {
+    if (bs == true) {
+      setState(() {
+        bs == false;
+        print(bs);
+      });
+    } else if (bs == false) {
+      setState(() {
+        bs == true;
+        print(bs);
+      });
+    }
+  }
+
   CardType typeCheck(String type2) {
-    if (type2 == "Mastro")
+    if (type2 == "Maestro")
       return CardType.maestro;
     else if (type2 == "RuPay")
       return CardType.rupay;
@@ -70,8 +80,8 @@ class _CardWidgetState extends State<CardWidget> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-      child: Stack(
-        alignment: Alignment.center,
+      child: Column(
+        //alignment: Alignment.center,
         children: [
           CreditCard(
             cardNumber: widget.cardNo,
@@ -85,7 +95,7 @@ class _CardWidgetState extends State<CardWidget> {
             backBackground: CardBackgrounds.white,
             showShadow: true,
           ),
-          Container(
+          /*Container(
             height: 200,
             width: 400,
             //decoration: BoxDecoration(color: Colors.red),
@@ -104,7 +114,7 @@ class _CardWidgetState extends State<CardWidget> {
                 }
               },
             ),
-          ),
+          ),*/
           /*ElevatedButton(
               onPressed: () {
                 //print(cardNo);

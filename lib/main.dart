@@ -3,8 +3,6 @@ import 'package:carder2/deletecard.dart';
 import 'package:carder2/models/DatabaseHelper.dart';
 import 'package:carder2/models/cardwidget.dart';
 import 'package:flutter/material.dart';
-import 'package:awesome_card/awesome_card.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'models/fab.dart';
 
 void main() {
@@ -14,14 +12,13 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData.light(),
-      //home: const MyHomePage(title: 'Flutter Demo Home Page'),
-      home: AddCard(),
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      //home: AddCard(),
     );
   }
 }
@@ -41,6 +38,20 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text(
+          "Carder 2",
+          style: TextStyle(color: Colors.black),
+        ),
+        leading: GestureDetector(
+          onTap: () {/* Write listener code here */},
+          child: Icon(
+            Icons.menu,
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -51,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 future: _dbhelper.getCards(),
                 builder: (context, AsyncSnapshot snapshot) {
                   return ListView.builder(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) {
@@ -81,11 +92,11 @@ class _MyHomePageState extends State<MyHomePage> {
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => AddCard()));
             },
-            label: Text(
+            label: const Text(
               "Add Card",
               style: TextStyle(color: Colors.white),
             ),
-            icon: Icon(Icons.credit_card_outlined),
+            icon: const Icon(Icons.credit_card_outlined),
             foregroundColor: Colors.white,
           ),
           FloatingActionButton.extended(
@@ -94,9 +105,10 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => DeleteCard()));
+              //srotateCard();
             },
-            label: Text("Delete Card"),
-            icon: Icon(Icons.credit_card_off_outlined),
+            label: const Text("Delete Card"),
+            icon: const Icon(Icons.credit_card_off_outlined),
           ),
         ],
       ),
